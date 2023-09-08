@@ -1,4 +1,5 @@
 {
-  "workspace.art_style" : 0,
-  "workspace.name" : "Ghost | Theme"
+  "workspace.art_style" : 1,
+  "workspace.color" : 12,
+  "workspace.name" : "Ghost Theme"
 }

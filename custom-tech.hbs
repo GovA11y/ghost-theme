@@ -1,0 +1,107 @@
+{{!< default}}
+
+{{!-- The tag above means: insert everything in this file
+into the {body} tag of the default.hbs template --}}
+
+{{#post}}
+{{!-- Everything inside the #post block pulls data from the page --}}
+
+<main id="site-main" class="site-main">
+<article class="article {{post_class}}">
+
+    {{#match @page.show_title_and_feature_image}}
+        <header class="article-header gh-canvas">
+            <h1 class="article-title">{{title}}</h1>
+            {{#if feature_image}}
+                <figure class="article-image">
+                    <img
+                        srcset="{{img_url feature_image size="s"}} 300w,
+                                {{img_url feature_image size="m"}} 600w,
+                                {{img_url feature_image size="l"}} 1000w,
+                                {{img_url feature_image size="xl"}} 2000w"
+                        sizes="(min-width: 1400px) 1400px, 92vw"
+                        src="{{img_url feature_image size="xl"}}"
+                        alt="{{#if feature_image_alt}}{{feature_image_alt}}{{else}}{{title}}{{/if}}"
+                    />
+                    {{#if feature_image_caption}}
+                        <figcaption>{{feature_image_caption}}</figcaption>
+                    {{/if}}
+                </figure>
+            {{/if}}
+        </header>
+    {{/match}}
+
+    <section class="gh-content gh-canvas">
+        {{content}}
+
+        {{!-- Custom Tech Check Form --}}
+        <form id="techCheckForm">
+            <label for="url">Enter a URL to check:</label>
+            <input type="url" id="url" name="url" required>
+            <button type="submit">Check</button>
+        </form>
+
+        <div id="results"></div>
+    </section>
+</article>
+</main>
+
+{{/post}}
+<style>
+  #techCheckForm {
+    margin-bottom: 20px;
+  }
+
+  #techCheckForm label {
+    display: block;
+    margin-bottom: 5px;
+  }
+
+  #techCheckForm input {
+    margin-bottom: 10px;
+    padding: 5px;
+  }
+
+  #techCheckForm button {
+    padding: 5px 10px;
+  }
+
+  #results {
+    border: 1px solid #ccc;
+    padding: 20px;
+  }
+
+  #results div {
+    margin-bottom: 10px;
+  }
+</style>
+
+<script>
+document.getElementById('techCheckForm').addEventListener('submit', function(e) {
+  e.preventDefault();
+  const url = document.getElementById('url').value;
+  fetch(`https://tech.gova11y.io/extract?url=${encodeURIComponent(url)}`)
+    .then(response => response.json())
+    .then(data => {
+      displayResponseData(data);
+    })
+    .catch(error => {
+      console.error('Error:', error);
+    });
+});
+
+function displayResponseData(data) {
+  const resultsDiv = document.getElementById('results');
+  resultsDiv.innerHTML = ''; // clear any previous results
+
+  if(data && data.technologies) {
+    data.technologies.forEach(tech => {
+      const techDiv = document.createElement('div');
+      techDiv.textContent = `${tech.name} (${tech.confidence}% confidence)`;
+      resultsDiv.appendChild(techDiv);
+    });
+  } else {
+    resultsDiv.textContent = 'No technologies found or an error occurred.';
+  }
+}
+</script>

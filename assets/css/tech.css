@@ -1,50 +1,53 @@
 #techCheckForm {
-  margin-bottom: 20px;
+    margin-bottom: 20px;
+    max-width: 800px;
+    margin: 0 auto;
 }
 
 #techCheckForm label {
-  display: block;
-  margin-bottom: 5px;
+    display: block;
+    margin-bottom: 5px;
 }
 
 #techCheckForm input {
-  margin-bottom: 10px;
-  padding: 5px;
+    margin-bottom: 10px;
+    padding: 10px;
+    width: 100%;
+    border: 1px solid #ccc;
+    border-radius: 5px;
+    font-size: 1rem;
 }
 
 #techCheckForm button {
-  padding: 5px 10px;
+    padding: 10px 20px;
+    font-size: 1rem;
 }
 
-#techCheckForm input:focus {
-  outline-color: #3498db;
+#results, #urls {
+    border: 1px solid #ccc;
+    padding: 20px;
+    margin-bottom: 20px;
+    max-width: 800px;
+    margin: 20px auto;
+    display: none; /* Hide initially */
 }
 
-#techCheckForm button:focus {
-  outline-color: #3498db;
-}
-
-#results {
-  border: 1px solid #ccc;
-  padding: 20px;
-}
-
-#results div {
-  margin-bottom: 10px;
+#results div, #urls div {
+    margin-bottom: 10px;
 }
 
 .result-card {
-  border: 1px solid #ccc;
-  padding: 20px;
-  margin-bottom: 20px;
+    border: 1px solid #ccc;
+    padding: 20px;
+    margin-bottom: 20px;
 }
 
 .result-card h3 {
-  margin-bottom: 10px;
+    margin-bottom: 10px;
 }
 
 .result-card p {
-  margin: 5px 0;
+    margin: 5px 0;
 }
 
 @keyframes spin {
@@ -52,7 +55,7 @@
   100% { transform: rotate(360deg); }
 }
 
-#loader {
+.loader {
   border: 16px solid #f3f3f3;
   border-top: 16px solid #3498db;
   border-radius: 50%;
@@ -60,7 +63,7 @@
   height: 120px;
   animation: spin 2s linear infinite;
   margin: 0 auto;
-  display: none;
+  display: none; /* Hide initially */
 }
 
 .category {
@@ -104,5 +107,22 @@
   text-align: center;
   line-height: 20px;
   color: #fff;
-  border-radius: 5px 0 0 5px;
+  border-radius: 5px;
+}
+
+.confidence-label {
+  text-align: center;
+  margin-top: 5px;
+  font-size: 0.8rem;
+}
+
+.more-info-btn {
+  display: inline-block;
+  padding: 5px 10px;
+  margin-top: 10px;
+  background-color: #3498db;
+  color: #fff;
+  text-decoration: none;
+  border-radius: 5px;
+  text-align: center;
 }

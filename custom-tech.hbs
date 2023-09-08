@@ -80,7 +80,7 @@ into the {body} tag of the default.hbs template --}}
 document.getElementById('techCheckForm').addEventListener('submit', function(e) {
   e.preventDefault();
   const url = document.getElementById('url').value;
-  fetch(`https://tech.gova11y.io/extract?url=${encodeURIComponent(url)}`)
+  fetch(`https://api.gova11y.io/extract?url=${url}`)
     .then(response => response.json())
     .then(data => {
       displayResponseData(data);

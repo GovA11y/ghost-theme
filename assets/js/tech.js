@@ -1,37 +1,31 @@
-document.getElementById('techCheckForm').addEventListener('submit', function(e) {
+document.getElementById('techCheckForm').addEventListener('submit', function (e) {
   e.preventDefault();
-  let url = document.getElementById('url').value;
+  const url = document.getElementById('url').value;
   const resultsDiv = document.getElementById('results');
   const loader = document.querySelector('.loader');
 
-  // Ensure the input is a valid URL
-  if (!url.startsWith('http://') && !url.startsWith('https://')) {
-    url = 'http://' + url;
-  }
-
+  resultsDiv.innerHTML = '';
   loader.style.display = 'block'; // Show loader
-  resultsDiv.style.display = 'none'; // Hide results
 
   fetch(`https://tech.gova11y.io/extract?url=${url}`)
     .then(response => response.json())
     .then(data => {
       loader.style.display = 'none'; // Hide loader
-      resultsDiv.style.display = 'block'; // Show results
-      displayResponseData(data);
+      displayResponseData(data, url);
     })
     .catch(error => {
       console.error('Error:', error);
       loader.style.display = 'none'; // Hide loader
-      resultsDiv.textContent = 'An error occurred while fetching the data. Please try again.'; // Display error message
+      resultsDiv.textContent = 'An error occurred while fetching the data. Please try again.';
     });
 });
 
-function displayResponseData(data) {
+function displayResponseData(data, url) {
   const resultsDiv = document.getElementById('results');
   resultsDiv.innerHTML = '';
 
   // Display URL response data
-  displayURLResponseData(data.urls);
+  displayURLResponseData(data.urls, url, data.technologies);
 
   // Group technologies by category
   const techCategories = groupTechnologiesByCategory(data.technologies);
@@ -55,11 +49,14 @@ function displayResponseData(data) {
 }
 
 function groupTechnologiesByCategory(technologies) {
-  return technologies.reduce((acc, tech) => {
-    const { category } = tech;
-    if (!acc[category]) acc[category] = [];
-    acc[category].push(tech);
-    return acc;
+  return technologies.reduce((categories, tech) => {
+    tech.categories.forEach(category => {
+      if (!categories[category.name]) {
+        categories[category.name] = [];
+      }
+      categories[category.name].push(tech);
+    });
+    return categories;
   }, {});
 }
 
@@ -90,11 +87,6 @@ function createTechCard(tech) {
   confidenceContainer.appendChild(confidenceChart);
   techCard.appendChild(confidenceContainer);
 
-  const confidenceLabel = document.createElement('p');
-  confidenceLabel.className = 'confidence-label';
-  confidenceLabel.textContent = 'Confidence';
-  techCard.appendChild(confidenceLabel);
-
   const moreInfoBtn = document.createElement('a');
   moreInfoBtn.href = `${tech.website}`;
   moreInfoBtn.className = 'more-info-btn';
@@ -104,18 +96,62 @@ function createTechCard(tech) {
   return techCard;
 }
 
-function displayURLResponseData(urls) {
+function displayURLResponseData(urls, url, technologies) {
   const urlsDiv = document.getElementById('urls');
   urlsDiv.innerHTML = '';
   urlsDiv.style.display = 'block';
 
   const urlsHeader = document.createElement('h2');
-  urlsHeader.textContent = 'URL Response Data';
+  urlsHeader.textContent = `A11yTecher Results for ${new URL(url).hostname}`;
   urlsDiv.appendChild(urlsHeader);
 
-  Object.entries(urls).forEach(([url, status]) => {
-    const urlDiv = document.createElement('div');
-    urlDiv.textContent = `${url}: ${status}`;
-    urlsDiv.appendChild(urlDiv);
+  const table = document.createElement('table');
+  urlsDiv.appendChild(table);
+
+  Object.entries(urls).forEach(([url, data]) => {
+    const row = document.createElement('tr');
+
+    const requestUrlCell = document.createElement('td');
+    requestUrlCell.textContent = url;
+    row.appendChild(requestUrlCell);
+
+    const responseCodeCell = document.createElement('td');
+    responseCodeCell.textContent = `${data.status} ${getStatusEmoji(data.status)}`;
+    row.appendChild(responseCodeCell);
+
+    if (data.redirected) {
+      const forwardedUrlCell = document.createElement('td');
+      forwardedUrlCell.textContent = data.url;
+      row.appendChild(forwardedUrlCell);
+
+      const forwardedResponseCodeCell = document.createElement('td');
+      forwardedResponseCodeCell.textContent = `${data.status} ${getStatusEmoji(data.status)}`;
+      row.appendChild(forwardedResponseCodeCell);
+    }
+
+    table.appendChild(row);
   });
+
+  function getStatusEmoji(status) {
+    if (status >= 200 && status < 300) {
+      return '✅'; // Success
+    }
+    if (status >= 300 && status < 400) {
+      return '🔀'; // Redirection
+    }
+    if (status >= 400 && status < 500) {
+      return '⚠️'; // Client error
+    }
+    if (status >= 500) {
+      return '⛔'; // Server error
+    }
+    return '❓'; // Unknown
+  }
+
+  const techCategories = groupTechnologiesByCategory(technologies);
+
+  // Display additional details about the check
+  const detailsDiv = document.createElement('div');
+  detailsDiv.textContent = `The check discovered that the URL uses ${technologies.length} different technologies spread across ${Object.keys(techCategories).length} categories, providing a diverse digital infrastructure. Details regarding the specific technologies and categories are displayed below.`;
+  urlsDiv.appendChild(detailsDiv);
 }

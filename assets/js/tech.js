@@ -1,6 +1,12 @@
 document.getElementById('techCheckForm').addEventListener('submit', function (e) {
   e.preventDefault();
-  const url = document.getElementById('url').value;
+  let url = document.getElementById('url').value;
+
+  // Ensure the URL starts with 'http://' or 'https://'
+  if (!/^https?:\/\//i.test(url)) {
+    url = 'http://' + url;
+  }
+
   const resultsDiv = document.getElementById('results');
   const loader = document.querySelector('.loader');
 

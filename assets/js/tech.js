@@ -2,62 +2,87 @@ document.getElementById('techCheckForm').addEventListener('submit', function(e) 
   e.preventDefault();
   const url = document.getElementById('url').value;
   const resultsDiv = document.getElementById('results');
+  const loader = document.getElementById('loader');
 
-  resultsDiv.innerHTML = 'Loading...'; // Display loading message
+  resultsDiv.innerHTML = '';
+  loader.style.display = 'block';  // Show loader
 
   fetch(`https://tech.gova11y.io/extract?url=${url}`)
     .then(response => response.json())
     .then(data => {
+      loader.style.display = 'none';  // Hide loader
       displayResponseData(data);
     })
     .catch(error => {
       console.error('Error:', error);
-      resultsDiv.textContent = 'An error occurred while fetching the data. Please try again.'; // Display error message
+      loader.style.display = 'none';  // Hide loader
+      resultsDiv.textContent = 'An error occurred while fetching the data. Please try again.';
     });
 });
 
-
 function displayResponseData(data) {
-    const resultsDiv = document.getElementById('results');
-    resultsDiv.innerHTML = ''; // clear any previous results
+  const resultsDiv = document.getElementById('results');
+  resultsDiv.innerHTML = '';
 
-    if (data && data.technologies) {
-        const highConfidence = [];
-        const mediumConfidence = [];
-        const lowConfidence = [];
+  // Display URL response data
+  displayURLResponseData(data.urls);
 
-        data.technologies.forEach(tech => {
-            if (tech.confidence > 80) {
-                highConfidence.push(tech);
-            } else if (tech.confidence > 50) {
-                mediumConfidence.push(tech);
-            } else {
-                lowConfidence.push(tech);
-            }
-        });
+  // Group technologies by category
+  const techCategories = groupTechnologiesByCategory(data.technologies);
 
-        if (highConfidence.length > 0) {
-            const highConfidenceDiv = document.createElement('div');
-            highConfidenceDiv.className = 'result-card';
-            highConfidenceDiv.innerHTML = '<h3>High Confidence Technologies</h3>' + highConfidence.map(tech => `<p>${tech.name} (${tech.confidence}% confidence)</p>`).join('');
-            resultsDiv.appendChild(highConfidenceDiv);
-        }
+  // Create a section for each category
+  Object.entries(techCategories).forEach(([categoryName, techs]) => {
+    const categoryDiv = document.createElement('div');
+    categoryDiv.className = 'category';
 
-        if (mediumConfidence.length > 0) {
-            const mediumConfidenceDiv = document.createElement('div');
-            mediumConfidenceDiv.className = 'result-card';
-            mediumConfidenceDiv.innerHTML = '<h3>Medium Confidence Technologies</h3>' + mediumConfidence.map(tech => `<p>${tech.name} (${tech.confidence}% confidence)</p>`).join('');
-            resultsDiv.appendChild(mediumConfidenceDiv);
-        }
+    const categoryHeader = document.createElement('h2');
+    categoryHeader.textContent = categoryName;
+    categoryDiv.appendChild(categoryHeader);
 
-        if (lowConfidence.length > 0) {
-            const lowConfidenceDiv = document.createElement('div');
-            lowConfidenceDiv.className = 'result-card';
-            lowConfidenceDiv.innerHTML = '<h3>Low Confidence Technologies</h3>' + lowConfidence.map(tech => `<p>${tech.name} (${tech.confidence}% confidence)</p>`).join('');
-            resultsDiv.appendChild(lowConfidenceDiv);
-        }
-    } else {
-        resultsDiv.textContent = 'No technologies found or an error occurred.';
-    }
+    // Create a card for each technology
+    techs.forEach(tech => {
+      categoryDiv.appendChild(createTechCard(tech));
+    });
+
+    resultsDiv.appendChild(categoryDiv);
+  });
 }
 
+function groupTechnologiesByCategory(technologies) {
+  return technologies.reduce((categories, tech) => {
+    tech.categories.forEach(category => {
+      if (!categories[category.name]) {
+        categories[category.name] = [];
+      }
+      categories[category.name].push(tech);
+    });
+    return categories;
+  }, {});
+}
+
+function createTechCard(tech) {
+  const card = document.createElement('div');
+  card.className = 'tech-card';
+  card.innerHTML = `
+    <div class="tech-header">
+      <img src="https://placehold.co/50x50?${tech.icon}.svg" alt="${tech.name} icon" />
+      <h3><a href="${tech.website}" target="_blank">${tech.name}</a> (${tech.version || 'No version available'})</h3>
+    </div>
+    <p>${tech.description || 'No description available'}</p>
+    <div class="chart-container">
+      <div class="confidence-chart" style="width: ${tech.confidence}%;">
+        ${tech.confidence}%
+      </div>
+    </div>
+  `;
+  return card;
+}
+
+function displayURLResponseData(urls) {
+  const urlsDiv = document.getElementById('urls');
+  urlsDiv.innerHTML = `
+    ${Object.entries(urls).map(([url, data]) => `
+      <p>${url}: ${data.status} ${data.redirected ? `(Redirected to: ${data.url})` : ''}</p>
+    `).join('')}
+  `;
+}

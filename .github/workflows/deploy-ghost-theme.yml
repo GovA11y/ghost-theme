@@ -5,6 +5,7 @@ on:
       - master
       - main
       - prod
+      - add_techchecks_page
 jobs:
   deploy:
     runs-on: ubuntu-22.04

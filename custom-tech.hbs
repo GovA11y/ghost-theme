@@ -1,7 +1,6 @@
 {{!< default}}
 
-{{!-- The tag above means: insert everything in this file
-into the {body} tag of the default.hbs template --}}
+{{!-- The tag above means: insert everything in this file into the {body} tag of the default.hbs template --}}
 
 {{#post}}
 {{!-- Everything inside the #post block pulls data from the page --}}
@@ -47,61 +46,6 @@ into the {body} tag of the default.hbs template --}}
 </main>
 
 {{/post}}
-<style>
-  #techCheckForm {
-    margin-bottom: 20px;
-  }
 
-  #techCheckForm label {
-    display: block;
-    margin-bottom: 5px;
-  }
-
-  #techCheckForm input {
-    margin-bottom: 10px;
-    padding: 5px;
-  }
-
-  #techCheckForm button {
-    padding: 5px 10px;
-  }
-
-  #results {
-    border: 1px solid #ccc;
-    padding: 20px;
-  }
-
-  #results div {
-    margin-bottom: 10px;
-  }
-</style>
-
-<script>
-document.getElementById('techCheckForm').addEventListener('submit', function(e) {
-  e.preventDefault();
-  const url = document.getElementById('url').value;
-  fetch(`https://tech.gova11y.io/extract?url=${url}`)
-    .then(response => response.json())
-    .then(data => {
-      displayResponseData(data);
-    })
-    .catch(error => {
-      console.error('Error:', error);
-    });
-});
-
-function displayResponseData(data) {
-  const resultsDiv = document.getElementById('results');
-  resultsDiv.innerHTML = ''; // clear any previous results
-
-  if(data && data.technologies) {
-    data.technologies.forEach(tech => {
-      const techDiv = document.createElement('div');
-      techDiv.textContent = `${tech.name} (${tech.confidence}% confidence)`;
-      resultsDiv.appendChild(techDiv);
-    });
-  } else {
-    resultsDiv.textContent = 'No technologies found or an error occurred.';
-  }
-}
-</script>
+<link rel="stylesheet" type="text/css" href="https://gova11y.io/assets/css/tech.css">
+<script src="https://gova11y.io/assets/js/tech.js"></script>

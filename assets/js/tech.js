@@ -67,40 +67,50 @@ function groupTechnologiesByCategory(technologies) {
 }
 
 function createTechCard(tech) {
-  const techCard = document.createElement('div');
-  techCard.className = 'tech-card';
+    const techCard = document.createElement('div');
+    techCard.className = 'tech-card';
 
-  const header = document.createElement('div');
-  header.className = 'tech-header';
-  const img = document.createElement('img');
-  img.src = `https://placehold.co/50x50?${tech.icon}.svg`;
-  header.appendChild(img);
-  const title = document.createElement('h3');
-  title.textContent = tech.name;
-  header.appendChild(title);
-  techCard.appendChild(header);
+    const header = document.createElement('div');
+    header.className = 'tech-header';
+    const img = document.createElement('img');
+    img.src = 'https://placehold.co/100x100';
+    header.appendChild(img);
+    // img.src = tech.icon ? `https://gova11y.io/images/???/${tech.icon}` : 'https://placehold.co/100x100';
 
-  const version = document.createElement('p');
-  version.textContent = tech.version ? `Version: ${tech.version}` : '';
-  techCard.appendChild(version);
+    const title = document.createElement('h3');
+    title.textContent = tech.name;
+    header.appendChild(title);
+    techCard.appendChild(header);
 
-  const confidenceContainer = document.createElement('div');
-  confidenceContainer.className = 'chart-container';
-  const confidenceChart = document.createElement('div');
-  confidenceChart.className = 'confidence-chart';
-  confidenceChart.style.width = `${tech.confidence}%`;
-  confidenceChart.textContent = `${tech.confidence}%`;
-  confidenceContainer.appendChild(confidenceChart);
-  techCard.appendChild(confidenceContainer);
+    const description = document.createElement('p');
+    description.textContent = tech.description ? tech.description : 'No description available';
+    techCard.appendChild(description);
 
-  const moreInfoBtn = document.createElement('a');
-  moreInfoBtn.href = `${tech.website}`;
-  moreInfoBtn.className = 'more-info-btn';
-  moreInfoBtn.textContent = 'More Info';
-  techCard.appendChild(moreInfoBtn);
+    if(tech.version) {
+        const version = document.createElement('p');
+        version.textContent = `Version: ${tech.version}`;
+        techCard.appendChild(version);
+    }
 
-  return techCard;
+    const confidenceContainer = document.createElement('div');
+    confidenceContainer.className = 'chart-container';
+    const confidenceChart = document.createElement('div');
+    confidenceChart.className = 'confidence-chart';
+    confidenceChart.style.width = `${tech.confidence}%`;
+    confidenceChart.textContent = `${tech.confidence}%`;
+    confidenceContainer.appendChild(confidenceChart);
+    techCard.appendChild(confidenceContainer);
+
+    const moreInfoBtn = document.createElement('a');
+    moreInfoBtn.href = tech.website;
+    moreInfoBtn.className = 'more-info-btn';
+    moreInfoBtn.textContent = `Learn more about ${tech.name}`;
+    techCard.appendChild(moreInfoBtn);
+
+    return techCard;
 }
+
+
 
 function displayURLResponseData(urls, url, technologies) {
   const urlsDiv = document.getElementById('urls');

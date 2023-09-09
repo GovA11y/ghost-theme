@@ -1,12 +1,14 @@
 #techCheckForm {
     margin-bottom: 20px;
-    max-width: 800px;
+    max-width: 500px;
     margin: 0 auto;
+    width: 75%;
 }
 
 #techCheckForm label {
     display: block;
     margin-bottom: 5px;
+
 }
 
 #techCheckForm input {
@@ -15,21 +17,20 @@
     width: 100%;
     border: 1px solid #ccc;
     border-radius: 5px;
-    font-size: 1rem;
 }
 
 #techCheckForm button {
     padding: 10px 20px;
-    font-size: 1rem;
+    border-radius: 5px;
+
 }
 
 #results, #urls {
-    border: 1px solid #ccc;
     padding: 20px;
     margin-bottom: 20px;
     max-width: 800px;
     margin: 20px auto;
-    /*display: none;  Hide initially */
+    width: 100%
 }
 
 #results div, #urls div {
@@ -66,6 +67,15 @@
   display: none; /* Hide initially */
 }
 
+.loader {
+  border: 16px solid #f3f3f3;
+  border-radius: 50%;
+  border-top: 16px solid #3498db;
+  width: 120px;
+  height: 120px;
+  animation: spin 2s linear infinite;
+  margin: 0 auto;
+}
 
 .category {
   margin-bottom: 20px;
@@ -126,3 +136,28 @@
   border-radius: 5px;
   width: 100px;
 }
+
+
+
+.confidence-chart {
+    border-radius: 50%;
+    background: conic-gradient(red, yellow, green);
+    width: 50px;
+    height: 50px;
+    line-height: 50px;
+    text-align: center;
+    font-weight: bold;
+    position: relative;
+}
+.confidence-chart::before {
+    content: '';
+    position: absolute;
+    width: 2px;
+    height: 25px;
+    background: black;
+    top: 50%;
+    left: 50%;
+    transform: translate(-50%, -50%) rotate(calc(var(--percentage) * 1deg));
+    transform-origin: bottom center;
+}
+

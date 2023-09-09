@@ -92,19 +92,14 @@ function createTechCard(tech) {
         techCard.appendChild(version);
     }
 
-    const confidenceContainer = document.createElement('div');
-    confidenceContainer.className = 'chart-container';
-    const confidenceChart = document.createElement('div');
-    confidenceChart.className = 'confidence-chart';
-    confidenceChart.style.width = `${tech.confidence}%`;
-    confidenceChart.textContent = `${tech.confidence}%`;
-    confidenceContainer.appendChild(confidenceChart);
-    techCard.appendChild(confidenceContainer);
+    const confidence = document.createElement('p');
+    confidence.textContent = `A11yzer Confidence: ${tech.confidence}%`;
+    techCard.appendChild(confidence);
 
     const moreInfoBtn = document.createElement('a');
     moreInfoBtn.href = tech.website;
     moreInfoBtn.className = 'more-info-btn';
-    moreInfoBtn.textContent = `Learn more about ${tech.name}`;
+    moreInfoBtn.textContent = `More ${tech.name} Info`;
     techCard.appendChild(moreInfoBtn);
 
     return techCard;

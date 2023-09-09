@@ -161,3 +161,4 @@ function displayURLResponseData(urls, url, technologies) {
   detailsDiv.textContent = `The check discovered that the URL uses ${technologies.length} different technologies spread across ${Object.keys(techCategories).length} categories, providing a diverse digital infrastructure. Details regarding the specific technologies and categories are displayed below.`;
   urlsDiv.appendChild(detailsDiv);
 }
+

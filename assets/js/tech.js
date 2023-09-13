@@ -11,7 +11,7 @@ document.getElementById('techCheckForm').addEventListener('submit', function (e)
   const loader = document.querySelector('.loader');
 
   resultsDiv.innerHTML = '';
-  loader.style.display = 'block'; // Show loader
+  // loader.style.display = 'block'; // Show loader
 
   fetch(`https://tech.gova11y.io/extract?url=${url}`)
     .then(response => response.json())

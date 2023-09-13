@@ -1,0 +1,126 @@
+* {
+  box-sizing: border-box;
+}
+
+#techCheckForm {
+    margin-bottom: 20px;
+    max-width: 500px;
+    margin: 0 auto;
+    width: 75%;
+}
+
+#techCheckForm label {
+    display: block;
+    margin-bottom: 5px;
+}
+
+#techCheckForm input {
+    margin-bottom: 10px;
+    padding: 10px;
+    width: 100%;
+    border: 1px solid #ccc;
+    border-radius: 5px;
+}
+
+#techCheckForm button {
+    padding: 10px 20px;
+    border-radius: 5px;
+    transition: background-color 0.3s ease;
+}
+
+#techCheckForm button:hover {
+    background-color: #2980b9;
+}
+
+#results, #urls {
+    padding: 20px;
+    margin-bottom: 20px;
+    max-width: 800px;
+    margin: 20px auto;
+    width: 100%;
+}
+
+#results div, #urls div {
+    margin-bottom: 10px;
+}
+
+.result-card, .tech-card {
+    border: 1px solid #ccc;
+    padding: 20px;
+    margin-bottom: 20px;
+    transition: all 0.3s ease;
+}
+
+.result-card h3 {
+    margin-bottom: 10px;
+}
+
+.result-card p {
+    margin: 5px 0;
+}
+
+@keyframes spin {
+  0% { transform: rotate(0deg); }
+  100% { transform: rotate(360deg); }
+}
+
+.loader {
+  border: 16px solid #f3f3f3;
+  border-top: 16px solid #3498db;
+  border-radius: 50%;
+  width: 120px;
+  height: 120px;
+  animation: spin 2s linear infinite;
+  margin: 0 auto;
+  display: none; /* Hide initially */
+}
+
+.category {
+  margin-bottom: 20px;
+}
+
+.tech-header {
+  display: flex;
+  align-items: center;
+}
+
+.tech-header img {
+  width: 50px;
+  height: 50px;
+  margin-right: 10px;
+}
+
+.tech-header a {
+  color: #4D9DE0;
+  text-decoration: none;
+}
+
+.more-info-btn {
+  display: block;
+  margin: 20px auto;
+  padding: 10px;
+  background-color: #3498db;
+  color: #fff;
+  text-align: center;
+  text-decoration: none;
+  border-radius: 5px;
+  width: 30%;
+  transition: background-color 0.3s ease;
+}
+
+.more-info-btn:hover {
+  background-color: #2980b9;
+}
+
+:focus {
+  outline: 2px solid #3498db;
+}
+
+@media (max-width: 600px) {
+  #techCheckForm, #results, #urls {
+    width: 90%;
+  }
+  .more-info-btn {
+    width: 50%;
+  }
+}

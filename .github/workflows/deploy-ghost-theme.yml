@@ -1,4 +1,5 @@
-
+# https://github.com/marketplace/actions/deploy-ghost-theme
+# https://github.com/getsentry/action-release
 name: Deploy Theme
 
 on:
@@ -57,7 +58,7 @@ jobs:
           fetch-depth: 0
 
       - name: Create Release
-        uses: ncipollo/release-action@v1.12.0
+        uses: ncipollo/release-action@v1.13.0
         with:
           artifacts: "" # You can specify the artifacts to upload here
           body: "Auto-generated release from v${{ needs.versioning.outputs.version }}"
@@ -66,7 +67,7 @@ jobs:
           token: ${{ secrets.BOT_TOKEN }}
 
   configure-sentry:
-    needs: create-release
+    needs: versioning
     name: Configure Sentry
     runs-on: ubuntu-latest
     steps:
@@ -83,6 +84,7 @@ jobs:
           SENTRY_URL: ${{ secrets.SENTRY_URL }}
         with:
           environment: production
+          version: ${{ needs.versioning.outputs.version }}
 
   deploy-ghost:
     runs-on: ubuntu-22.04
